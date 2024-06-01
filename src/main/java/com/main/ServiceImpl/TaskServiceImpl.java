@@ -52,4 +52,14 @@ public class TaskServiceImpl implements TaskService{
 	}
 
 
+	@Override
+	public Task updateTaskStatus(Long id, String status) {
+		int updated = trepo.updateTaskStatus(id, status);
+		if (updated == 1) {
+			return trepo.findById(id).orElseThrow(() -> new RuntimeException("Task not found"));
+		} else {
+			throw new RuntimeException("Task not found or not updated");
+		}
+	}
+
 }

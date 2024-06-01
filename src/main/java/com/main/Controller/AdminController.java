@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.main.Dto.TaskDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -52,7 +53,7 @@ public class AdminController {
 	private ProjecttableService ptservice;
 
 
-//Editing PRoject MAnager
+//Editing Project Manager
     @PutMapping("/admin/editPmanager/{id}")
     public ResponseEntity<Pmanager> updateProjectManager(@PathVariable Integer id, @RequestBody Pmanager updatedPmanager) {
         // Make sure the ID in the path matches the ID in the request body
@@ -82,6 +83,8 @@ public class AdminController {
 	        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
 	    }
 	}
+
+
 
     @GetMapping("admin/PManager/{id}")
     public Pmanager getPmanagerById(@PathVariable Integer id) {
@@ -114,14 +117,20 @@ public Task getTaskById(@PathVariable Long id) {
 
     }
 
-        @PutMapping("/teammeber/uptasks/{id}")
-        public ResponseEntity<Task> updateTaskMember(@PathVariable Long id, @RequestBody Task updatedTask) {
-            if (!id.equals(updatedTask.getId())) {
-                return ResponseEntity.badRequest().build();
-            }
-            Task result = taskservice.updatedTask(updatedTask);
-            return ResponseEntity.ok(result);
-        }
+//        @PutMapping("/teammeber/uptasks/{id}")
+//        public ResponseEntity<Task> updateTaskMember(@PathVariable Long id, @RequestBody Task updatedTask) {
+//            if (!id.equals(updatedTask.getId())) {
+//                return ResponseEntity.badRequest().build();
+//            }
+//            Task result = taskservice.updatedTask(updatedTask);
+//            return ResponseEntity.ok(result);
+//        }
+
+    @PutMapping("/teammember/uptasks/{id}")
+    public ResponseEntity<Task> updateTaskStatus(@PathVariable Long id, @RequestBody TaskDTO taskDTO) {
+        Task updatedTask = taskservice.updateTaskStatus(id, taskDTO.getStatus());
+        return ResponseEntity.ok(updatedTask);
+    }
 
 
     @DeleteMapping("/admin/deletePmanager/{id}")
@@ -223,19 +232,6 @@ public Task getTaskById(@PathVariable Long id) {
     
     @PostMapping("projectmanager/{teamMemberId}/tasks")
     public Task createTask(@PathVariable Integer teamMemberId, @RequestBody Task task) {
-        // Here you can add logic to associate the task with the team member
-//    	Task task=new Task();
-//    	Projecttable table=ptservice.getProjectById(taskDto.getProjectId());
-//    	if(table!=null) {
-//    		task.setProject(table);
-//    	}
-//    	else {
-//    		return null;
-//    	}
-//    	TeamMemb tm = tservice.getById(taskDto.getTeamMemberId());
-//    	task.setTeamMember(tm);
-//    	task.setDescription(taskDto.getDescription());
-//    	task.setStatus(taskDto.getStatus());
     	
     	return taskservice.saveTask(task);
     }

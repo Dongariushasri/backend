@@ -23,4 +23,6 @@ public interface TaskService {
 
 
 	public void deleteTask(Long id);
+
+	Task updateTaskStatus(Long id, String status);
 }
